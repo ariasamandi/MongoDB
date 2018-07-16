@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/users" method='post'>
+        Name: <input type="text" name='name'>
+        Age: <input type="text" name='age'>
+        <input type="submit">
+    </form>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+        </tr>
+        <% for(var user in users){%>
+        <tr>
+            <td><%=users[user].name%></td>
+            <td><%=users[user].age%></td>
+        </tr>
+        <%}%>
+    </table>
+</body>
+</html>
