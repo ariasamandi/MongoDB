@@ -25,19 +25,20 @@ module.exports = {
         })
     },
     create: (req, res)=>{
-        Task.create(req.params.body, (err, data)=>{
+        console.log(req.body);
+        Task.create(req.body, (err, data)=>{
             if(err){
                 console.log(err);
                 res.redirect('/');
             }
             else{
                 console.log("this is the create method");
-                res.json({task: "success", data: data})
+                res.json({data: data})
             }
         })
     },
     delete: (req, res)=>{
-        Task.findOneAndRemove({task: req.params.task}, (err, data)=>{
+        Task.findOneAndRemove({_id: req.params.id}, (err, data)=>{
             if(err){
                 console.log(err);
                 res.redirect('/');
@@ -46,6 +47,21 @@ module.exports = {
                 console.log("Removed");
                 res.json({removed: data})
             }
+        })
+    },
+    update: (req, res)=>{
+        console.log("phase 1");
+        Task.update({_id: req.params.id}, req.body, (err, data)=>{
+            console.log("phase 1");
+            if(err){
+                console.log("phase 2");
+                console.log(err);
+                res.redirect('/');
+            }
+            else{
+                console.log(data);
+                res.json({update: data})
+            } 
         })
     }
 }
