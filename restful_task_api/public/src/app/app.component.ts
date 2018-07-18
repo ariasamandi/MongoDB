@@ -8,25 +8,22 @@ import { HttpService } from './http.service';
 export class AppComponent implements OnInit {
   // Set the attribute tasks to be an array.
   title = "app";
-
+  clicked: any;
   tasks = [];
+  newTask: any;
+  show: any;
+  editing: any;
   constructor(private _httpService: HttpService){}
   // ngOnInit will run when the component is initialized, after the constructor method.
   ngOnInit(){
     this.getTasksFromService();
+    this.newTask = { title: "", description: "", completed: false};
+
   }
-  onButtonClick(): void { 
-    console.log(`Click event is working`);
-}
-onButtonClickParam(num: Number): void { 
-    console.log(`Click event is working with num param: ${num}`);
-}
-onButtonClickParams(num: Number, str: String): void { 
-    console.log(`Click event is working with num param: ${num} and str param: ${str}`);
-}
-onButtonClickEvent(event: any): void { 
-    console.log(`Click event is working with event: ${event}`);
-}
+  showTask(task: any){
+    this.clicked = task;
+
+  }
   getTasksFromService(){
      let observable = this._httpService.getTasks();
      observable.subscribe(data => {
@@ -35,9 +32,39 @@ onButtonClickEvent(event: any): void {
         // This may be different for you, depending on how you set up your Task API.
         this.tasks = data['tasks'];
      });
+    
+  }
+  onSubmit() {
+    // Code to send off the form data (this.newTask) to the Service
+    // ...
+    // Reset this.newTask to a new, clean object.
+    this.newTask = { title: "", description: "" }
+  }
+  editTask(task: any){
+    console.log(task);
+    this.editing = {...task};
+  }
+  submitEdit(){
+    let obs = this._httpService.editTask(this.editing);
+    obs.subscribe(data=>{
+      console.log(data);
+      this.getTasksFromService();
+      this.editing = null;
+    })
+  }
+  addTask(){
+    let obs = this._httpService.addTask(this.newTask);
+    obs.subscribe(data=>{
+      console.log(data);
+      this.newTask = {title: "", description: "", completed: ""};
+      this.getTasksFromService()
+    })
+  }
+  deleteTask(task: any){
+    let obs = this._httpService.deleteTask(task);
+    obs.subscribe(data=>{
+      console.log(data);
+      this.getTasksFromService();
+    })
   }
 }
-
- // subscribe to the Observable and provide the code we would like to do with our data from the response
-//  tempObservable.subscribe(data => console.log("Got our tasks!", data));
-//  console.log("hi");
